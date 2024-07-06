@@ -22,7 +22,7 @@ const TxAdminLogo: React.FC<TxAdminLogoProps> = ({ themeName }) => {
 const StyledRoot = styled(Box)(({ theme }) => ({
   height: "fit-content",
   background: theme.palette.background.default,
-  width: 325,
+  width: 400,
   borderRadius: 15,
   display: "flex",
   flexDirection: "column",

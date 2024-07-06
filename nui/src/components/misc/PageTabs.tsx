@@ -18,7 +18,7 @@ export const PageTabs: React.FC = () => {
 
   const handleTabPress = useCallback(() => {
     if (tabDisabled || !visible) return;
-    setPage((prevState) => (prevState + 1 > 2 ? 0 : prevState + 1));
+    setPage((prevState) => (prevState + 1 > 3 ? 0 : prevState + 1));
   }, [tabDisabled, visible]);
 
   useKey(serverCtx.switchPageKey, handleTabPress);
@@ -35,6 +35,7 @@ export const PageTabs: React.FC = () => {
         <StyledTab label="Main" wrapped disableFocusRipple />
         <StyledTab label="Players" wrapped disableFocusRipple />
         <StyledTab label="txAdmin" wrapped disableFocusRipple />
+        <StyledTab label="Reports" wrapped disableFocusRipple />
       </Tabs>
     </Box>
   );
