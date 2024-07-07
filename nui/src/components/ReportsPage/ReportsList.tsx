@@ -34,7 +34,7 @@ export default function ReportsList() {
 
     const clickHandler = (report: Report) => {
         reportModal?.setData(report)
-        reportModal?.setTypeModal(EReportModalType.AdminDialog)
+        reportModal?.setTypeModal(EReportModalType.UserDialog) // For test
         reportModal?.setShowModal(true)
     }
 
@@ -47,7 +47,6 @@ export default function ReportsList() {
                             <Box color={(theme) => theme.palette.primary.main}>{typeIcon[report.type]}</Box>
                             <Typography
                                 style={{ marginLeft: 5 }}
-                                noWrap
                                 variant="subtitle1"
                                 color="textPrimary"
                             >{report.label}</Typography>

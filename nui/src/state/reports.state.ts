@@ -11,6 +11,7 @@ export enum ReportType {
 export interface Report {
     label: string,
     type: ReportType,
+    text?: string,
     player: {
         id: number,
         name: string
