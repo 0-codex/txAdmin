@@ -1,13 +1,21 @@
 import React, {createContext, ReactElement, ReactNode, useContext, useState} from "react";
 import {Report, ReportType} from "@nui/src/state/reports.state";
 import {Box, Dialog, DialogContent, DialogTitle, IconButton, Typography} from "@mui/material";
-import {BugReport, Close, DirectionsWalk, QuestionMark, ReportProblem} from "@mui/icons-material";
+import ReportAdminModal from "@nui/src/components/ReportsModal/ReportAdminModal";
+import ReportUserModal from "@nui/src/components/ReportsModal/ReportUserModal";
+
+export enum EReportModalType {
+    AdminDialog,
+    UserDialog
+}
 
 interface IReportModalContext {
     setData: (report: Report | null) => void,
     data: Report | null,
     setShowModal: (state: boolean) => void,
-    showModal: boolean
+    showModal: boolean,
+    setTypeModal: (type: EReportModalType) => void,
+    typeModal: EReportModalType
 }
 
 const ReportModalContext = createContext<IReportModalContext | null>(null)
@@ -17,49 +25,23 @@ export const useReportModal = () => useContext(ReportModalContext)
 export default function ReportModalProvider({children}: {children: ReactNode}) {
     const [data, setData] = useState<Report | null>(null)
     const [showModal, setShowModal] = useState<boolean>(false)
-
-    const closeHandler = () => {
-        setShowModal(false)
-        setData(null)
-    }
-
-    const typeIcon: { [Type in ReportType]: React.ReactElement } = {
-        bug: <BugReport/>,
-        player: <DirectionsWalk/>,
-        problem: <ReportProblem/>,
-        other: <QuestionMark/>
-    }
+    const [typeModal, setTypeModal] = useState<EReportModalType>(EReportModalType.UserDialog)
 
     return (
         <ReportModalContext.Provider value={{
             setData: setData,
             data: data,
             setShowModal: setShowModal,
-            showModal: showModal
+            showModal: showModal,
+            setTypeModal: setTypeModal,
+            typeModal: typeModal
         }}>
             <Dialog open={showModal} sx={{
                 borderRadius: 15
             }}>
-                <Box sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                }}>
-                    <DialogTitle sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1
-                    }}>
-                        <Box sx={(theme) => ({
-                            color: theme.palette.primary.main
-                        })}>{data && typeIcon[data.type]}</Box>
-                        {data?.label}
-                    </DialogTitle>
-                    <IconButton onClick={closeHandler}><Close/></IconButton>
-                </Box>
-                <DialogContent>
-                    <Typography>{data?.type}</Typography>
-                </DialogContent>
+                {
+                    typeModal == EReportModalType.AdminDialog ? <ReportAdminModal data={data}/> : <ReportUserModal data={data}/>
+                }
             </Dialog>
             <Box>
                 {children}

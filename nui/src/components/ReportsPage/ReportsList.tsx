@@ -2,16 +2,8 @@ import {Box, styled, Typography} from "@mui/material";
 import {Report, ReportType, useFilterReportData, useReports} from "@nui/src/state/reports.state";
 import {useNuiEvent} from "@nui/src/hooks/useNuiEvent";
 import React from "react";
-import {
-    BugReport,
-    DevicesOther,
-    DirectionsWalk,
-    QuestionAnswer,
-    QuestionMark,
-    ReportProblem
-} from "@mui/icons-material";
-import {useDebounce} from "@nui/src/hooks/useDebouce";
-import {useReportModal} from "@nui/src/provider/ReportModalProvider";
+import {BugReport, DirectionsWalk, QuestionMark, ReportProblem} from "@mui/icons-material";
+import {EReportModalType, useReportModal} from "@nui/src/provider/ReportModalProvider";
 
 const CardBox = styled(Box)(({theme}) => ({
     borderRadius: 10,
@@ -42,6 +34,7 @@ export default function ReportsList() {
 
     const clickHandler = (report: Report) => {
         reportModal?.setData(report)
+        reportModal?.setTypeModal(EReportModalType.AdminDialog)
         reportModal?.setShowModal(true)
     }
 
