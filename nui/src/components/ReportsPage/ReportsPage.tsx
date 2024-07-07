@@ -1,9 +1,15 @@
-import {Box, InputAdornment, MenuItem, styled, TextField, Typography} from "@mui/material";
-import React, {ChangeEvent} from "react";
+import {Box, InputAdornment, MenuItem, styled, Typography} from "@mui/material";
+import React, {ChangeEvent, useEffect} from "react";
 import {useTranslate} from "react-polyglot";
 import {Filter, FilterAlt, Search, SearchRounded, SearchSharp} from "@mui/icons-material";
-import {ReportDataFilter, ReportType, useReportFilter} from "@nui/src/state/reports.state";
+import {TextField} from "../misc/TextField"
+import {
+    ReportDataFilter,
+    useReportFilterSearch,
+    useReportFilterType
+} from "@nui/src/state/reports.state";
 import ReportsList from "@nui/src/components/ReportsPage/ReportsList";
+import {useDebounce} from "@nui/src/hooks/useDebouce";
 
 const RootStyled = styled(Box)(({theme}) => ({
     flex: 1,
@@ -16,11 +22,17 @@ const TypographyTitle = styled(Typography)(({ theme }) => ({
 }));
 
 export default function ReportsPage({visible}: {visible: boolean}) {
-    const [filterData, setFilterData] = useReportFilter()
+    const [filterTypeData, setFilterTypeData] = useReportFilterType()
+    const [filterSearchData, setFilterSearchData] = useReportFilterSearch()
+
     const t = useTranslate()
 
-    const onFilterData = (e: ChangeEvent<HTMLInputElement>) => {
-        setFilterData(e.target.value as ReportDataFilter)
+    const onFilterTypeData = (e: ChangeEvent<HTMLInputElement>) => {
+        setFilterTypeData(e.target.value as ReportDataFilter)
+    }
+
+    const onFilterSearchData = (e: ChangeEvent<HTMLInputElement>) => {
+        setFilterSearchData(e.target.value)
     }
 
     return (
@@ -31,6 +43,7 @@ export default function ReportsPage({visible}: {visible: boolean}) {
                     <TextField
                         label={"Search"}
                         variant={"standard"}
+                        onChange={onFilterSearchData}
                         style={{
                             minWidth: 150
                         }}
@@ -45,10 +58,11 @@ export default function ReportsPage({visible}: {visible: boolean}) {
                         label={"Filter By"}
                         variant={"standard"}
                         select
+                        defaultValue={filterTypeData}
                         style={{
                             minWidth: 150
                         }}
-                        onChange={onFilterData}
+                        onChange={onFilterTypeData}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position={"start"}>
