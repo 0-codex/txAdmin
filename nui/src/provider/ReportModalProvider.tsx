@@ -1,6 +1,7 @@
-import {createContext, ReactElement, ReactNode, useContext, useState} from "react";
-import {Report} from "@nui/src/state/reports.state";
-import {Box} from "@mui/material";
+import React, {createContext, ReactElement, ReactNode, useContext, useState} from "react";
+import {Report, ReportType} from "@nui/src/state/reports.state";
+import {Box, Dialog, DialogContent, DialogTitle, IconButton, Typography} from "@mui/material";
+import {BugReport, Close, DirectionsWalk, QuestionMark, ReportProblem} from "@mui/icons-material";
 
 interface IReportModalContext {
     setData: (report: Report | null) => void,
@@ -17,6 +18,18 @@ export default function ReportModalProvider({children}: {children: ReactNode}) {
     const [data, setData] = useState<Report | null>(null)
     const [showModal, setShowModal] = useState<boolean>(false)
 
+    const closeHandler = () => {
+        setShowModal(false)
+        setData(null)
+    }
+
+    const typeIcon: { [Type in ReportType]: React.ReactElement } = {
+        bug: <BugReport/>,
+        player: <DirectionsWalk/>,
+        problem: <ReportProblem/>,
+        other: <QuestionMark/>
+    }
+
     return (
         <ReportModalContext.Provider value={{
             setData: setData,
@@ -24,10 +37,33 @@ export default function ReportModalProvider({children}: {children: ReactNode}) {
             setShowModal: setShowModal,
             showModal: showModal
         }}>
-            <Box display={showModal ? "flex" : "none"} bgcolor={"red"}>
-                <h1>Test</h1>
+            <Dialog open={showModal} sx={{
+                borderRadius: 15
+            }}>
+                <Box sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                }}>
+                    <DialogTitle sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1
+                    }}>
+                        <Box sx={(theme) => ({
+                            color: theme.palette.primary.main
+                        })}>{data && typeIcon[data.type]}</Box>
+                        {data?.label}
+                    </DialogTitle>
+                    <IconButton onClick={closeHandler}><Close/></IconButton>
+                </Box>
+                <DialogContent>
+                    <Typography>{data?.type}</Typography>
+                </DialogContent>
+            </Dialog>
+            <Box>
+                {children}
             </Box>
-            {children}
         </ReportModalContext.Provider>
     )
 }
