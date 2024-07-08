@@ -10,6 +10,7 @@ import {
 } from "@nui/src/state/reports.state";
 import ReportsList from "@nui/src/components/ReportsPage/ReportsList";
 import {useDebounce} from "@nui/src/hooks/useDebouce";
+import useReportListListener from "@nui/src/hooks/useReportListListener";
 
 const RootStyled = styled(Box)(({theme}) => ({
     flex: 1,
@@ -24,6 +25,8 @@ const TypographyTitle = styled(Typography)(({ theme }) => ({
 export default function ReportsPage({visible}: {visible: boolean}) {
     const [filterTypeData, setFilterTypeData] = useReportFilterType()
     const [filterSearchData, setFilterSearchData] = useReportFilterSearch()
+
+    useReportListListener()
 
     const t = useTranslate()
 
