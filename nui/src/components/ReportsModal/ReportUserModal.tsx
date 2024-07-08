@@ -19,6 +19,7 @@ import {atom, useRecoilState} from "recoil";
 import {TextField} from "../misc/TextField";
 import {enqueueSnackbar} from "notistack";
 import {EReportModalType, useReportModal} from "@nui/src/provider/ReportModalProvider";
+import {fetchNui} from "@nui/src/utils/fetchNui";
 
 const stepper = atom<number>({
     key: "setReportUserStepper",
@@ -65,6 +66,8 @@ function StepperContent({id}: { id: number }) {
                     }
                 })])
             )
+
+            fetchNui("signalReportCreated")
 
             enqueueSnackbar("Report envoyé", {
                 variant: "success"

@@ -31,7 +31,7 @@ export default function ReportsList() {
 
     const clickHandler = (report: Report) => {
         reportModal?.setData(report)
-        reportModal?.setTypeModal(EReportModalType.UserDialog) // For test
+        reportModal?.setTypeModal(EReportModalType.AdminDialog) // For test
         reportModal?.setShowModal(true)
     }
 
