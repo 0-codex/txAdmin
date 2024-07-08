@@ -19,11 +19,8 @@ const CardBox = styled(Box)(({theme}) => ({
 
 export default function ReportsList() {
     const filterData = useFilterReportData()
-    const [reports, setReports] = useReports()
 
     const reportModal = useReportModal()
-
-    useNuiEvent<Report[]>("setReportList", setReports)
 
     const typeIcon: { [Type in ReportType]: React.ReactElement } = {
         bug: <BugReport/>,
