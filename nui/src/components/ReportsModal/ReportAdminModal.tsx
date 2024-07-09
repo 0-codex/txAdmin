@@ -18,34 +18,46 @@ import {
     QuestionMark, Radar,
     ReportProblem
 } from "@mui/icons-material";
-import React from "react";
+import React, {useId, useState} from "react";
 import {Report, ReportType} from "@nui/src/state/reports.state";
 import {useReportModal} from "@nui/src/provider/ReportModalProvider";
+import ReportTabsInfo from "@nui/src/components/ReportsModal/Tabs/ReportTabsInfo";
+import ReportTabsAction from "@nui/src/components/ReportsModal/Tabs/ReportTabsAction";
+import ReportTabsPlayerProximity from "@nui/src/components/ReportsModal/Tabs/ReportTabsPlayerProximity";
 
-const tabs: {
-    label: string,
-    icon: React.ReactNode,
-    menu: React.ReactNode
-}[] = [
+const tabsList = [
     {
         label: "Action",
         icon: <FlashOn/>,
-        menu: <Box></Box>
+        menu: ReportTabsAction
     },
     {
         label: "Info",
         icon: <Article/>,
-        menu: <Box></Box>
+        menu: ReportTabsInfo
     },
     {
         label: "Players Proximity",
         icon: <Radar/>,
-        menu: <Box></Box>
+        menu: ReportTabsPlayerProximity
     }
 ]
 
+// Create Enumeration for Tabs
+const tabsLabel = tabsList.map(tab => tab.label)
+
+type TLabelTabs = typeof tabsLabel[number]
+
+let ETabs: { [K in TLabelTabs]: TLabelTabs } = {} as { [K in TLabelTabs]: TLabelTabs }
+let enumTabs: { [K in string]: string } = {}
+
+tabsLabel.forEach(tab => enumTabs[tab] = tab)
+
+ETabs = enumTabs as { [K in TLabelTabs]: TLabelTabs }
+
 export default function ReportAdminModal({data}: {data: Report | null}) {
     const reportModal = useReportModal()
+    const [tabs, setTabs] = useState<keyof typeof ETabs>(ETabs.Action)
 
     const closeHandler = () => {
         reportModal?.setShowModal(false)
@@ -83,7 +95,7 @@ export default function ReportAdminModal({data}: {data: Report | null}) {
             }}>
                 <List>
                     {
-                        tabs.map(tab => (
+                        tabsList.map(tab => (
                             <ListItemButton key={tab.label.toLowerCase().replace(" ", "_")} sx={{
                                 borderRadius: 2
                             }}>
@@ -96,7 +108,9 @@ export default function ReportAdminModal({data}: {data: Report | null}) {
                 <Box sx={{
                     flex: 1
                 }}>
-
+                    {
+                        tabsList.map(tab => (<tab.menu tabs={tabs} />))
+                    }
                 </Box>
             </DialogContent>
         </>
