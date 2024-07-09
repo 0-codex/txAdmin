@@ -1,14 +1,7 @@
-import React, {
-  createContext,
-  ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { fetchNui } from "../utils/fetchNui";
-import { useIsMenuVisibleValue } from "../state/visibility.state";
-import { txAdminMenuPage, usePageValue } from "../state/page.state";
+import React, {createContext, ReactNode, useCallback, useContext, useEffect, useState,} from "react";
+import {fetchNui} from "../utils/fetchNui";
+import {useIsMenuVisibleValue} from "../state/visibility.state";
+import {txAdminMenuPage, usePageValue} from "../state/page.state";
 
 const KeyboardNavContext = createContext(null);
 
@@ -32,7 +25,8 @@ export const KeyboardNavProvider: React.FC<KeyboardNavProviderProps> = ({
 
     if (
       curPage === txAdminMenuPage.IFrame ||
-      curPage === txAdminMenuPage.Players
+      curPage === txAdminMenuPage.Players ||
+        curPage === txAdminMenuPage.Reports
     ) {
       return setDisabledKeyNav(true);
     }

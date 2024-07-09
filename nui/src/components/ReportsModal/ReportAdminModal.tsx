@@ -16,7 +16,7 @@ import {
     FlashOn,
     HealthAndSafety,
     QuestionMark, Radar,
-    ReportProblem
+    ReportProblem, Screenshot, ScreenshotMonitor
 } from "@mui/icons-material";
 import React, {useId, useState} from "react";
 import {Report, ReportType} from "@nui/src/state/reports.state";
@@ -37,23 +37,24 @@ const tabsList = [
         menu: ReportTabsInfo
     },
     {
-        label: "Players Proximity",
-        icon: <Radar/>,
-        menu: ReportTabsPlayerProximity
+        label: "Screenshot",
+        icon: <ScreenshotMonitor/>,
+        menu: ReportTabsInfo
     }
-]
+] as const
 
 // Create Enumeration for Tabs
 const tabsLabel = tabsList.map(tab => tab.label)
 
 type TLabelTabs = typeof tabsLabel[number]
 
-let ETabs: { [K in TLabelTabs]: TLabelTabs } = {} as { [K in TLabelTabs]: TLabelTabs }
-let enumTabs: { [K in string]: string } = {}
+let ETabs: { [K in TLabelTabs]: K } = {} as { [K in TLabelTabs]: K }
+let enumTabs: { [K in string]: K } = {}
 
 tabsLabel.forEach(tab => enumTabs[tab] = tab)
 
-ETabs = enumTabs as { [K in TLabelTabs]: TLabelTabs }
+ETabs = enumTabs as { [K in TLabelTabs]: K }
+/* --- */
 
 export default function ReportAdminModal({data}: {data: Report | null}) {
     const reportModal = useReportModal()
@@ -69,6 +70,10 @@ export default function ReportAdminModal({data}: {data: Report | null}) {
         player: <DirectionsWalk/>,
         problem: <ReportProblem/>,
         other: <QuestionMark/>
+    }
+
+    const onClickTabsHandler = (tab: typeof tabsList[number]) => {
+        setTabs(ETabs[tab.label])
     }
 
     return (
@@ -98,7 +103,8 @@ export default function ReportAdminModal({data}: {data: Report | null}) {
                         tabsList.map(tab => (
                             <ListItemButton key={tab.label.toLowerCase().replace(" ", "_")} sx={{
                                 borderRadius: 2
-                            }}>
+                            }} onClick={() => onClickTabsHandler(tab)}
+                            selected={tabs == ETabs[tab.label]}>
                                 <ListItemIcon>{tab.icon}</ListItemIcon>
                                 <ListItemText>{tab.label}</ListItemText>
                             </ListItemButton>
@@ -109,7 +115,7 @@ export default function ReportAdminModal({data}: {data: Report | null}) {
                     flex: 1
                 }}>
                     {
-                        tabsList.map(tab => (<tab.menu tabs={tabs} />))
+                        tabsList.map(tab => (<tab.menu visible={tabs == ETabs[tab.label]} />))
                     }
                 </Box>
             </DialogContent>

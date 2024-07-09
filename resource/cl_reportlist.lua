@@ -18,11 +18,16 @@ end
 
 -- Dialog for create report
 RegisterCommand("txReport", function()
+    SetNuiFocus(true)
+    SetNuiFocusKeepInput(true)
     sendMenuMessage("showReportDialog", {})
 end, false)
 
 RegisterSecureNuiCallback("signalReportCreated", function(data, cb)
+    SetNuiFocus(false)
+    SetNuiFocusKeepInput(false)
     print(json.decode(data))
     --TriggerServerEvent("txsv:req:rlist:addReport", data)
     cb({})
+
 end)
